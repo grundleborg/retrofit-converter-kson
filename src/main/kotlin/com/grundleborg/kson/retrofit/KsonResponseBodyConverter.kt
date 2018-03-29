@@ -20,7 +20,6 @@ import com.grundleborg.kson.ObjectMapper
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import java.lang.reflect.Type
-import kotlin.reflect.KClass
 
 class KsonResponseBodyConverter<T: Any>(
         private val objectMapper: ObjectMapper,
@@ -28,7 +27,6 @@ class KsonResponseBodyConverter<T: Any>(
 ): Converter<ResponseBody, T> {
 
     override fun convert(value: ResponseBody?): T {
-        val cls = objectMapper.typeMap[type]!! as KClass<T>
-        return objectMapper.parse(value!!.charStream()!!, cls)
+        return objectMapper.parse(value!!.charStream()!!, type!!)
     }
 }

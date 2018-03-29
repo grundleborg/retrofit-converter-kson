@@ -25,7 +25,6 @@ import org.junit.Test
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.POST
-import java.io.IOException
 
 class BasicTests {
     private val server = MockWebServer()
@@ -43,7 +42,7 @@ class BasicTests {
     @Before
     fun setUp() {
         val mapper = ObjectMapper()
-        mapper.typeMap[DataClass::class.java] = DataClass::class
+        mapper.registerType(DataClass::class)
 
         val retrofit = Retrofit.Builder()
                 .baseUrl(server.url("/"))
@@ -53,8 +52,7 @@ class BasicTests {
     }
 
     @Test
-    @Throws(IOException::class, InterruptedException::class)
-    fun anInterface() {
+    fun `basic functionality`() {
         val jsonData = """{"item":"value"}"""
         server.enqueue(MockResponse().setBody(jsonData))
 
