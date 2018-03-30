@@ -9,13 +9,29 @@ buildscript {
     }
 }
 
-group 'com.grundleborg.kson'
-version '0.0.1'
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
 
 apply plugin: 'kotlin'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+def libGitUrl = gitUrl;
+def libWebUrl = webUrl;
+def libDescription = description;
+def libGroupId = groupId;
+def libArtifactId = artifactId;
+def libVersion = version;
+def libLicenseUrl = licenseUrl;
+
+group libGroupId
+version libVersion
 
 repositories {
     mavenCentral()
+    maven { url "https://dl.bintray.com/grundleborg/com.grundleborg.kson" }
     mavenLocal()
 }
 
@@ -24,7 +40,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     compile "com.squareup.retrofit2:retrofit:2.3.0"
-    compile "com.grundleborg.kson:kson:0.0.1"
+    compile 'com.grundleborg.kson:kson:0.1.0'
 
     // Unit testing dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -37,4 +53,44 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name libArtifactId
+            description libDescription
+            url libWebUrl
+            inceptionYear '2018'
+
+            packaging 'jar'
+            groupId libGroupId
+            artifactId libArtifactId
+            version libVersion
+
+            licenses {
+                license {
+                    name 'Apache-2.0'
+                    url libLicenseUrl
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = bintray_user
+    key = bintray_apikey
+    pkg {
+        repo = groupId
+        name = artifactId
+        licenses = ['Apache-2.0']
+        vcsUrl = libGitUrl
+        version {
+            name = libVersion
+            desc = 'retrofit-converter-kson ' + libVersion
+            vcsTag = 'v' + libVersion
+        }
+    }
+    configurations = ['archives']
 }
