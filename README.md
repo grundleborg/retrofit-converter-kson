@@ -17,7 +17,7 @@ maven { url "https://dl.bintray.com/grundleborg/com.grundleborg.kson" }
 And then in the `dependencies` block, add:
 
 ```groovy
-compile 'com.grundleborg.kson:retrofit-converter-kson:0.2.0'
+compile 'com.grundleborg.kson:retrofit-converter-kson:0.2.1'
 ```
 
 Example
